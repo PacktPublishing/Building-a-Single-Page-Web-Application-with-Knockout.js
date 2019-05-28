@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Knockout JS Demo</title>
+    <script type="text/javascript" src="Scripts/libs/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="Scripts/libs/knockout-2.2.1.debug.js"></script>
+    <script type="text/javascript" src="Scripts/libs/bootstrap.js"></script>
+    <script type="text/javascript" src="Scripts/libs/base.js"></script>
+    <script type="text/javascript" src="Scripts/libs/lodash.js"></script>
+    <script type="text/javascript" src="Scripts/main.js"></script>
+    <script type="text/javascript" src="Scripts/knockout-docs.js"></script>
+    <script type="text/javascript" src="Scripts/document.js"></script>
+    <script type="text/javascript" src="Scripts/spreadsheet.js"></script>
+    <script type="text/javascript" src="Scripts/filter.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="Styles/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="Styles/Site.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    <h1 class="inline">Welcome to Knockout Docs</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span4">
+                <div class="dropdown">
+                    <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="#">Create...</a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a tabindex="-1" href="#" data-bind="click: createDocument">Document</a></li>
+                        <li><a tabindex="-1" href="#" data-bind="click: createSpreadsheet">Spreadsheet</a></li>
+                    </ul>
+                </div>
+                <div class="well well-small" data-bind="with: filter">
+                    <label><input type="checkbox" data-bind="checked: showDocuments"/> Documents</label>
+                    <label><input type="checkbox" data-bind="checked: showSpreadsheets"/> Spreadsheets</label>
+                    <label>Search: <input type="text" data-bind="value: textFilter, valueUpdate: 'afterkeydown'"/></label>
+                </div>
+                <ul class="unstyled dropdown well" data-bind="foreach: filteredItems">
+                    <li class="document">
+                        <i class="icon-file"></i>
+                        <a href="#" data-bind="text: title, click: $parent.editItem"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="span8" data-bind="if: selectedItem">
+                <div class="dropdown well" data-bind="template: { name: selectedItem().templateName, data: selectedItem }">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    Debug:
+                    <!--<p data-bind="text: ko.toJSON($data)"></p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--templates-->
+    <script id="document-template" type="text/html">
+        <h2>Title:
+            <input class="input-xxlarge" type="text" data-bind="value: title" />
+        </h2>
+        <div>
+            <h3>Body:</h3>
+            <textarea class="input-block-level" data-bind="value: body"></textarea>
+        </div>
+    </script>
+
+    <script id="spreadsheet-template" type="text/html">
+        <h2>Title:
+            <input class="input-xxlarge" type="text" data-bind="value: title" />
+        </h2>
+        <table class="spreadsheet">
+            <thead>
+                <tr>
+                    <th>
+                        <!--Empty corner header-->
+                    </th>
+                    <!-- ko foreach: columnNames -->
+                    <th data-bind="text: $data"></th>
+                    <!-- /ko -->
+                    <th>
+                        <button class="btn" data-bind="click: addColumn">Add Column</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko foreach: {data: rows, as: 'row'} -->
+                <tr>
+                    <td data-bind="text: $index() + 1"></td>
+                    <!-- ko foreach: {data: row.cells, as: 'cell'} -->
+                    <td>
+                        <input type="text" data-bind="value: cell.value" />
+                    </td>
+                    <!-- /ko -->
+                    <td></td>
+                </tr>
+                <!-- /ko -->
+                <tr>
+                    <td>
+                        <button class="btn" data-bind="click: addRow">Add Row</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+</body>
+</html>

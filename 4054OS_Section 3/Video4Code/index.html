@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Knockout JS Demo</title>
+    <script type="text/javascript" src="Scripts/libs/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="Scripts/libs/knockout-2.2.1.debug.js"></script>
+    <script type="text/javascript" src="Scripts/libs/base.js"></script>
+    <script type="text/javascript" src="Scripts/main.js"></script>
+    <script type="text/javascript" src="Scripts/knockout-docs.js"></script>
+    <script type="text/javascript" src="Scripts/document.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="Styles/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="Styles/Site.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    <h1 class="inline">Welcome to Knockout Docs</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span4">
+                <ul class="unstyled dropdown well" data-bind="foreach: items">
+                    <li class="document">
+                        <i class="icon-file"></i>
+                        <a href="#" data-bind="text: title, click: $parent.editItem"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="span8">
+                <div class="dropdown well" data-bind="with: selectedItem">
+                    <h2>Title:
+                        <input class="input-xxlarge" type="text" data-bind="value: title"/>
+                    </h2>
+                    <div>
+                        <h3>Body:</h3>
+                        <textarea class="input-block-level" data-bind="value: body"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    Debug:
+                    <p data-bind="text: ko.toJSON($data)"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

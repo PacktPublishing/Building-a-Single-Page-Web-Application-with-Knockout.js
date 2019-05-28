@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Knockout JS Demo</title>
+    <script type="text/javascript" src="Scripts/libs/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="Scripts/libs/knockout-2.2.1.debug.js"></script>
+    <script type="text/javascript" src="Scripts/main.js"></script>
+    <link type="text/css" rel="stylesheet" href="Styles/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="Styles/Site.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    <h1 class="inline">Welcome to Knockout Docs</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    <h2>Title:
+                        <input class="input-xxlarge" type="text" data-bind="value: title"/>
+                    </h2>
+                    <div>
+                        <h3>Body:</h3>
+                        <textarea class="input-block-level" data-bind="value: body"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">s
+                    <!--TODO: Add Debug Code Here-->
+                    Debug:
+                    <p data-bind="text: ko.toJSON($data)"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

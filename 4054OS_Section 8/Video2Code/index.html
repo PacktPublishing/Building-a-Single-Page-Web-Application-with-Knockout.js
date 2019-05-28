@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Knockout JS Demo</title>
+    <script type="text/javascript" src="Scripts/libs/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="Scripts/libs/jquery-ui.js"></script>
+    <script type="text/javascript" src="Scripts/libs/knockout-2.2.1.debug.js"></script>
+    <script type="text/javascript" src="Scripts/libs/knockout-sortable.js"></script>
+    <script type="text/javascript" src="Scripts/libs/bootstrap.js"></script>
+    <script type="text/javascript" src="Scripts/libs/base.js"></script>
+    <script type="text/javascript" src="Scripts/libs/lodash.js"></script>
+    <script type="text/javascript" src="Scripts/custom-bindings.js"></script>
+    <script type="text/javascript" src="Scripts/main.js"></script>
+    <script type="text/javascript" src="Scripts/knockout-docs.js"></script>
+    <script type="text/javascript" src="Scripts/item-base.js"></script>
+    <script type="text/javascript" src="Scripts/document.js"></script>
+    <script type="text/javascript" src="Scripts/spreadsheet.js"></script>
+    <script type="text/javascript" src="Scripts/survey.js"></script>
+    <script type="text/javascript" src="Scripts/filter.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="Styles/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="Styles/Site.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    <h1 class="inline">Welcome to Knockout Docs</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span4">
+                <div class="dropdown">
+                    <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="#">Create...</a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a tabindex="-1" href="#" data-bind="click: createDocument">Document</a></li>
+                        <li><a tabindex="-1" href="#" data-bind="click: createSpreadsheet">Spreadsheet</a></li>
+                        <li><a tabindex="-1" href="#" data-bind="click: createSurvey">Survey</a></li>
+                    </ul>
+                </div>
+                <div class="well well-small" data-bind="with: filter">
+                    <label><input type="checkbox" data-bind="checked: showDocuments" />Documents</label>
+                    <label><input type="checkbox" data-bind="checked: showSpreadsheets" />Spreadsheets</label>
+                    <label><input type="checkbox" data-bind="checked: showSurveys" />Surveys</label>
+                    <label>Search:<input type="text" data-bind="value: textFilter, valueUpdate: 'afterkeydown'" /></label>
+                </div>
+                <ul class="unstyled dropdown well" data-bind="sortable: items">
+                    <li class="document" data-bind="visible: $parent.filter.itemMatchesFilter($data)">
+                        <i class="icon-file"></i>
+                        <a href="#" data-bind="text: title, click: $parent.editItem"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="span8" data-bind="if: selectedItem, slideUpdate: selectedItem">
+                <div class="dropdown well" data-bind="template: { name: selectedItem().templateName, data: selectedItem }">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div class="dropdown well">
+                    Debug:
+                    <pre data-bind="text: ko.toJSON($data, null, 4)"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--templates-->
+    <script id="document-template" type="text/html">
+        <h2>Title:
+            <input class="input-xxlarge" type="text" data-bind="value: title" />
+        </h2>
+        <div>
+            <h3>Body:</h3>
+            <textarea class="input-block-level" data-bind="value: body"></textarea>
+        </div>
+    </script>
+
+    <script id="spreadsheet-template" type="text/html">
+        <h2>Title:
+            <input class="input-xxlarge" type="text" data-bind="value: title" />
+        </h2>
+        <table class="spreadsheet">
+            <thead>
+                <tr>
+                    <th>
+                        <!--Empty corner header-->
+                    </th>
+                    <!-- ko foreach: columnNames -->
+                    <th data-bind="text: $data"></th>
+                    <!-- /ko -->
+                    <th>
+                        <button class="btn" data-bind="click: addColumn">Add Column</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko foreach: {data: rows, as: 'row'} -->
+                <tr>
+                    <td data-bind="text: $index() + 1"></td>
+                    <!-- ko foreach: {data: row.cells, as: 'cell'} -->
+                    <td>
+                        <input type="text" data-bind="value: cell.value" />
+                    </td>
+                    <!-- /ko -->
+                    <td></td>
+                </tr>
+                <!-- /ko -->
+                <tr>
+                    <td>
+                        <button class="btn" data-bind="click: addRow">Add Row</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+
+    <script id="survey-template" type="text/html">
+        <h2>Title:
+            <input class="input-xxlarge" type="text" data-bind="value: title" />
+        </h2>
+        <div class="well well-small">
+            <label><input type="checkbox" data-bind="checked: isInEditMode" />Edit mode</label>
+            <div class="dropdown" data-bind="visible: isInEditMode">
+                <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="#">Create...</a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li><a tabindex="-1" href="#" data-bind="click: createTextBoxQuestion">Text Box Question</a></li>
+                    <li><a tabindex="-1" href="#" data-bind="click: createCheckBoxQuestion">Check Box Question</a></li>
+                    <li><a tabindex="-1" href="#" data-bind="click: createRadioButtonQuestion">Radio Button Question</a></li>
+                    <li><a tabindex="-1" href="#" data-bind="click: createSelectListQuestion">Select List Question</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-bind="foreach: questions">
+            <div class="well well-small" data-bind="template: templateName "></div>
+        </div>
+    </script>
+    <script id="survey-textbox-template" type="text/html">
+        <div data-bind="visible: $parent.isInEditMode">
+            <label>Question Text: <input type="text" data-bind="value: questionText"/></label>
+        </div>
+        <div data-bind="visible: !$parent.isInEditMode()">
+            <label><span data-bind="text: questionText"></span><input type="text"/></label>
+        </div>
+    </script>
+    <script id="survey-checkbox-template" type="text/html">
+        <div data-bind="visible: $parent.isInEditMode">
+            <label>Question Title: <input type="text" data-bind="value: questionText"/></label>
+            <button class="btn" data-bind="click: addOption">Add Option</button>
+            <div data-bind="foreach: options">
+                <div>
+                    <input type="checkbox" disabled="disabled"/>
+                    <input type="text" data-bind="value: optionText"/>
+                    <button class="btn" data-bind="click: $parent.options.remove.bind($parent.options)">x</button>
+                </div>
+            </div>
+        </div>        
+        <div data-bind="visible: !$parent.isInEditMode()">
+            <label data-bind="text: questionText"></label>
+            <div data-bind="foreach: options">
+                <div>
+                    <label><input type="checkbox"/><span data-bind="text: optionText"></span></label>
+                </div>
+            </div>
+        </div>        
+    </script>
+    <script id="survey-radiobutton-template" type="text/html">
+        <div data-bind="visible: $parent.isInEditMode">
+            <label>Question Title: <input type="text" data-bind="value: questionText"/></label>
+            <button class="btn" data-bind="click: addOption">Add Option</button>
+            <div data-bind="foreach: options">
+                <div>
+                    <input type="radio" disabled="disabled"/>
+                    <input type="text" data-bind="value: optionText"/>
+                    <button class="btn" data-bind="click: $parent.options.remove.bind($parent.options)">x</button>
+                </div>
+            </div>
+        </div>
+        <div data-bind="visible: !$parent.isInEditMode()">
+            <label data-bind="text: questionText"></label>
+            <div data-bind="foreach: options">
+                <div>
+                    <label><input type="radio" data-bind="checked: $parent.dummyRadioSelection, value: optionText"/><span data-bind="text: optionText"></span></label>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script id="survey-selectlist-template" type="text/html">
+        <div data-bind="visible: $parent.isInEditMode">
+            <label>Question Title: <input type="text" data-bind="value: questionText"/></label>
+            <button class="btn" data-bind="click: addOption">Add Option</button>
+            <div data-bind="foreach: options">
+                <div>
+                    <input type="text" data-bind="value: optionText"/>
+                    <button class="btn" data-bind="click: $parent.options.remove.bind($parent.options)">x</button>
+                </div>
+            </div>
+        </div>
+        <div data-bind="visible: !$parent.isInEditMode()">
+            <label data-bind="text: questionText"></label>
+            <select data-bind="options: options, optionsText: 'optionText'"></select>
+        </div>
+    </script>
+</body>
+</html>

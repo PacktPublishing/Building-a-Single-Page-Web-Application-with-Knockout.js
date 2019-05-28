@@ -1,0 +1,13 @@
+.spreadsheet
+{
+	overflow: auto;
+}
+
+.spreadsheet td {
+	padding: 0;	
+}
+.spreadsheet td input {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
